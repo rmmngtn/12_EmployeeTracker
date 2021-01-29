@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var ctable = require("console.table"); 
+const { addRole, addEmployee } = require("./js/addFunctions");
+
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -22,6 +25,92 @@ connection.connect(function (err) {
     init();
 });
 
+
+
+
 function init() { 
-    inquirer.prompt({
+    inquirer
+    .prompt({
+      name: "action",
+      type: "rawlist",
+      message: "What would you like to do?",
+      choices: [
+        "Add a new department, role, or employee",
+        "View departments, roles, and/or employees",
+        "Update employee information"
+      ]
+    })
+    .then(function(answer) {
+      switch (answer.action) {
+      case "Add a new department, role, or employee":
+        addNew();
+        break;
+
+      case "View departments, roles, and/or employees":
+        view();
+        break;
+
+      case "Update employee information":
+        update();
+        break;
+
+      
+      }
+    });
+}
+
+function addNew() { 
+    inquirer
+    .prompt({
+      name: "addChoice",
+      type: "rawlist",
+      message: "What would you like to add?",
+      choices: [
+        "Add a new department",
+        "Add a new employee role", 
+        "Add a new employee"
+      ]
+    })
+    .then(function(answer) {
+      switch (answer.addChoice) {
+      case "Add a new department":
+        addDept(); 
+        break;
+
+      case "Add a new employee role":
+        addRole(); 
+        break;
+
+      case "Add a new employee":
+        addEmployee()
+        break;
+
+      }
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function view() { 
+
+}
+
+function update() { 
+
 }
