@@ -2,6 +2,8 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var ctable = require("console.table");
 const { addDept, addRole, addEmployee } = require("./js/addFunctions");
+const { viewDept, viewRoles, viewEmployees } = require("./js/viewFunctions"); 
+const {} = require("./js/updateFunctions"); 
 
 
 
@@ -37,7 +39,8 @@ function init() {
             choices: [
                 "Add a new department, role, or employee",
                 "View departments, roles, and/or employees",
-                "Update employee information", "Exit: I'm all finished."
+                "Update employee information", 
+                "Exit: I'm all finished."
             ]
         })
         .then(function (answer) {
@@ -114,35 +117,65 @@ function view() {
                     break;
 
                 case "View Employees":
-                    viewEmployee()
+                    viewEmployees()
                     break;
 
             }
         })
-}
+}; 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function view() {
-
-}
-
-function update() {
-
-}
+function update() { 
+    connection.query("SELECT * FROM employee", function(err, results){ 
+            if (err) throw err; 
+        
+        inquirer.prompt([
+            { 
+                name: "choice",
+                type: "rawlist", 
+                message: "Which employee would you like to update?",
+                choices: function() { 
+                    var choicesArray = []; 
+                    for (var i = 0; i < results.length; i++) { 
+                        choicesArray.push(results[i].first_name + last_name); 
+                    }
+                    return choicesArray; 
+                }, 
+            }, 
+            { 
+                name: "role",
+                type: "rawlist", 
+                message: "What is the employee's new role?",
+                choices: function() { 
+                    var choicesArray = []; 
+                    for (var i = 0; i < results.length; i++) { 
+                        choicesArray.push(results[i].title); 
+                    }
+                    return choicesArray; 
+                }, 
+            }, 
+        ])
+        .then(function(answer) {
+            var chosenItem; 
+            for (var i=0; i < results.length; i++) { 
+                if (results[i].item_name === answer.choice) { 
+                    chosenItem = results[i]
+                }
+            } 
+            if (chosenItem.highest_bid < parseInt(answer.bid)) {
+                connection.query(
+                    "UPDATE auctions SET? WHERE ?", 
+                    [ 
+                      { highest_bid: answer.bid
+                    }, 
+                    {
+                        id: chosenItem.id
+                    }  
+                    ], 
+                    function (error){ 
+                        if (error) throw error; 
+                    }
+                )
+             }
+            
+            
+        })
