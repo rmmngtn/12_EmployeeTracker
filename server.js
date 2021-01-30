@@ -3,7 +3,8 @@ var inquirer = require("inquirer");
 var ctable = require("console.table");
 // const { addDept, addRole, addEmployee } = require("./js/addFunctions");
 // const { viewDept, viewRoles, viewEmployees } = require("./js/viewFunctions"); 
-// const update = require("./js/updateFunctions"); 
+// const update =
+ require("./js/updateFunctions"); 
 
 
 
@@ -135,7 +136,7 @@ function addDept() {
     ])
     .then(function(answer) { 
         connection.query( 
-            "INSERT INTO departments SET?", 
+            "INSERT INTO department SET?", 
             { 
                 id: answer.id, 
                 dept_name: answer.dept, 
