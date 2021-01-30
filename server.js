@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var ctable = require("console.table"); 
-const { addRole, addEmployee } = require("./js/addFunctions");
+var ctable = require("console.table");
+const { addDept, addRole, addEmployee } = require("./js/addFunctions");
 
 
 
@@ -28,65 +28,97 @@ connection.connect(function (err) {
 
 
 
-function init() { 
+function init() {
     inquirer
-    .prompt({
-      name: "action",
-      type: "rawlist",
-      message: "What would you like to do?",
-      choices: [
-        "Add a new department, role, or employee",
-        "View departments, roles, and/or employees",
-        "Update employee information"
-      ]
-    })
-    .then(function(answer) {
-      switch (answer.action) {
-      case "Add a new department, role, or employee":
-        addNew();
-        break;
+        .prompt({
+            name: "action",
+            type: "rawlist",
+            message: "What would you like to do?",
+            choices: [
+                "Add a new department, role, or employee",
+                "View departments, roles, and/or employees",
+                "Update employee information", "Exit: I'm all finished."
+            ]
+        })
+        .then(function (answer) {
+            switch (answer.action) {
+                case "Add a new department, role, or employee":
+                    addNew();
+                    break;
 
-      case "View departments, roles, and/or employees":
-        view();
-        break;
+                case "View departments, roles, and/or employees":
+                    view();
+                    break;
 
-      case "Update employee information":
-        update();
-        break;
+                case "Update employee information":
+                    update();
+                    break;
 
-      
-      }
-    });
+                case "Exit: I'm all finished.":
+                    connection.end();
+
+            }
+        });
 }
 
-function addNew() { 
+function addNew() {
     inquirer
-    .prompt({
-      name: "addChoice",
-      type: "rawlist",
-      message: "What would you like to add?",
-      choices: [
-        "Add a new department",
-        "Add a new employee role", 
-        "Add a new employee"
-      ]
-    })
-    .then(function(answer) {
-      switch (answer.addChoice) {
-      case "Add a new department":
-        addDept(); 
-        break;
+        .prompt({
+            name: "addChoice",
+            type: "rawlist",
+            message: "What would you like to add?",
+            choices: [
+                "Add a new department",
+                "Add a new employee role",
+                "Add a new employee"
+            ]
+        })
+        .then(function (answer) {
+            switch (answer.addChoice) {
+                case "Add a new department":
+                    addDept();
+                    break;
 
-      case "Add a new employee role":
-        addRole(); 
-        break;
+                case "Add a new employee role":
+                    addRole();
+                    break;
 
-      case "Add a new employee":
-        addEmployee()
-        break;
+                case "Add a new employee":
+                    addEmployee()
+                    break;
 
-      }
-    })
+            }
+        })
+}
+
+function view() {
+    inquirer
+        .prompt({
+            name: "views",
+            type: "rawlist",
+            message: "What would you like to view?",
+            choices: [
+                "View All Departments",
+                "View Roles",
+                "View Employees"
+            ]
+        })
+        .then(function (answer) {
+            switch (answer.views) {
+                case "View All Departments":
+                    viewDept();
+                    break;
+
+                case "View Roles":
+                    viewRoles();
+                    break;
+
+                case "View Employees":
+                    viewEmployee()
+                    break;
+
+            }
+        })
 }
 
 
@@ -107,10 +139,10 @@ function addNew() {
 
 
 
-function view() { 
+function view() {
 
 }
 
-function update() { 
+function update() {
 
 }
